@@ -2,7 +2,7 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from auth import initialize_session_state, login_page, register_page, show_user_info
-from chat import process_query, display_chat_history
+from chat import display_chat_interface, load_chat_history, display_chat_history
 
 # Load environment variables
 load_dotenv()
@@ -18,7 +18,11 @@ def main():
     initialize_session_state()
 
     # Set up the page
-    st.set_page_config(page_title="Medical Assistant Chatbot", layout="wide")
+    st.set_page_config(
+        page_title="Medical Assistant Chatbot",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
 
     # Display user info in sidebar
     show_user_info()
@@ -37,24 +41,28 @@ def main():
         # Main application interface for logged-in users
         st.title('Medical Assistant Chatbot')
 
-        # Chat interface
-        st.header("Ask a Question")
+        # Add sidebar options
+        with st.sidebar:
+            st.markdown("---")
+            st.subheader("Options")
+            view_mode = st.radio(
+                "View Mode:",
+                ["Chat Interface", "Chat History"],
+                key="view_mode"
+            )
 
-        input_text = st.text_area("Type your health-related question here", height=100)
+            if st.button("Clear Current Chat"):
+                st.session_state.chat_messages = []
+                st.rerun()
 
-        if st.button("Get Answer"):
-            if input_text:
-                with st.spinner("Processing your query..."):
-                    response = process_query(input_text, st.session_state['user_id'])
+        # Load chat history if not already loaded
+        load_chat_history(st.session_state['user_id'])
 
-                st.markdown("### Answer:")
-                st.write(response)
-            else:
-                st.warning("Please enter a question.")
-
-        # Display chat history
-        st.markdown("---")
-        display_chat_history(st.session_state['user_id'])
+        # Display either chat interface or chat history based on selection
+        if view_mode == "Chat Interface":
+            display_chat_interface()
+        else:
+            display_chat_history(st.session_state['user_id'])
 
 
 if __name__ == "__main__":

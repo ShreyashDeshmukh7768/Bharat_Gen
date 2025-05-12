@@ -1,8 +1,10 @@
-langchain_core
 streamlit
-python-dotenv
-langchain_community
-langchain_openai
-supabase
-streamlit-authenticator
 bcrypt
+python-dotenv
+supabase
+langchain-openai
+langchain-core
+langchain-community
+langchain
+ollama
+python-dotenv
