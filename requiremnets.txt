@@ -1,0 +1,8 @@
+langchain_core
+streamlit
+python-dotenv
+langchain_community
+langchain_openai
+supabase
+streamlit-authenticator
+bcrypt
