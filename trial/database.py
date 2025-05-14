@@ -131,7 +131,7 @@ class SupabaseClient:
             print(f"Error getting chat history: {e}")
             return []
             
-    # NEW FUNCTIONS FOR EMOTIONAL DIARY
+    # FUNCTIONS FOR EMOTIONAL DIARY
     
     def save_emotional_diary_entry(self, user_id, entry, response, mood, json_data):
         """Save emotional diary entry for a user"""
@@ -165,4 +165,49 @@ class SupabaseClient:
             return True
         except Exception as e:
             print(f"Error deleting diary entry: {e}")
+            return False
+            
+    # NEW FUNCTIONS FOR DOCUMENT MANAGEMENT
+    
+    def save_document(self, user_id, file_name, extracted_text, summary, medicines):
+        """Save document information to the database"""
+        try:
+            response = self.client.table('user_documents').insert({
+                'user_id': user_id,
+                'file_name': file_name,
+                'extracted_text': extracted_text,
+                'summary': summary,
+                'medicines': medicines
+            }).execute()
+            return True
+        except Exception as e:
+            print(f"Error saving document: {e}")
+            return False
+            
+    def get_user_documents(self, user_id):
+        """Retrieve documents for a user"""
+        try:
+            response = self.client.table('user_documents').select('*').eq('user_id', user_id).order('created_at', 
+                                                                                              desc=True).execute()
+            return response.data
+        except Exception as e:
+            print(f"Error getting user documents: {e}")
+            return []
+            
+    def get_document_by_id(self, document_id):
+        """Retrieve a specific document by ID"""
+        try:
+            response = self.client.table('user_documents').select('*').eq('id', document_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            print(f"Error getting document by ID: {e}")
+            return None
+            
+    def delete_document(self, document_id):
+        """Delete a document from the database"""
+        try:
+            self.client.table('user_documents').delete().eq('id', document_id).execute()
+            return True
+        except Exception as e:
+            print(f"Error deleting document: {e}")
             return False

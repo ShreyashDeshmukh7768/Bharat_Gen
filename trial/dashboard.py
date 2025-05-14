@@ -83,17 +83,18 @@ def display_dashboard():
                 st.session_state['current_page'] = 'profile'
                 st.rerun()
 
-        # Health Resources tile
+        # NEW Document Upload tile (replacing Health Resources)
         with col4:
             st.markdown("""
             <div class="hover-tile">
-                <h2>Health Resources</h2>
-                <p>Access helpful health information and resources</p>
+                <h2>Document Upload</h2>
+                <p>Upload and analyze medical documents and prescriptions</p>
             </div>
             """, unsafe_allow_html=True)
 
-            if st.button("Explore Resources", key="explore_resources", use_container_width=True):
-                st.info("Health resources feature coming soon!")
+            if st.button("Upload Documents", key="upload_documents", use_container_width=True):
+                st.session_state['current_page'] = 'document_upload'
+                st.rerun()
 
     with right_col:
         # Mood tracking summary
@@ -120,4 +121,3 @@ def display_dashboard():
 
     *Note: This application is for informational purposes only and is not a substitute for professional medical advice.*
     """)
-
