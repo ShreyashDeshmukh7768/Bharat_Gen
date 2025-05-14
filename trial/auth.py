@@ -1,3 +1,5 @@
+#auth.py
+
 import streamlit as st
 import bcrypt
 from database import SupabaseClient

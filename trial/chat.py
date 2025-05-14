@@ -1,3 +1,5 @@
+#chat.py
+
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -9,7 +11,7 @@ import time
 
 def initialize_llm():
     """Initialize the language model"""
-    return Ollama(model="mistral")
+    return Ollama(model="tinyllama")
 
 
 def get_prompt_template():

@@ -1,3 +1,5 @@
+# app.py
+
 import streamlit as st
 import os
 from dotenv import load_dotenv
@@ -5,6 +7,7 @@ from auth import initialize_session_state, login_page, register_page, show_user_
 from chat import display_chat_interface, load_chat_history, display_chat_history
 from dashboard import display_dashboard
 from profile import display_profile_update
+from emotional_diary_page import display_emotional_diary
 
 # Load environment variables
 load_dotenv()
@@ -98,6 +101,9 @@ def main():
                 display_chat_interface()
             else:
                 display_chat_history(st.session_state['user_id'])
+        elif st.session_state['current_page'] == 'emotional_diary':
+            # Display the emotional diary page
+            display_emotional_diary()
 
 
 if __name__ == "__main__":

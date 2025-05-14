@@ -1,3 +1,5 @@
+# profile.py
+
 import streamlit as st
 from database import SupabaseClient
 from auth import hash_password, verify_password

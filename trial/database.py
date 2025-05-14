@@ -1,3 +1,5 @@
+# database.py
+
 import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
@@ -128,3 +130,39 @@ class SupabaseClient:
         except Exception as e:
             print(f"Error getting chat history: {e}")
             return []
+            
+    # NEW FUNCTIONS FOR EMOTIONAL DIARY
+    
+    def save_emotional_diary_entry(self, user_id, entry, response, mood, json_data):
+        """Save emotional diary entry for a user"""
+        try:
+            response_data = self.client.table('emotional_diary').insert({
+                'user_id': user_id,
+                'entry': entry,
+                'response': response,
+                'mood': mood,
+                'json_data': json_data
+            }).execute()
+            return True
+        except Exception as e:
+            print(f"Error saving diary entry: {e}")
+            return False
+
+    def get_emotional_diary_history(self, user_id):
+        """Retrieve emotional diary history for a user"""
+        try:
+            response = self.client.table('emotional_diary').select('*').eq('user_id', user_id).order('created_at',
+                                                                                            desc=False).execute()
+            return response.data
+        except Exception as e:
+            print(f"Error getting diary history: {e}")
+            return []
+            
+    def delete_emotional_diary_entry(self, entry_id):
+        """Delete a specific emotional diary entry"""
+        try:
+            self.client.table('emotional_diary').delete().eq('id', entry_id).execute()
+            return True
+        except Exception as e:
+            print(f"Error deleting diary entry: {e}")
+            return False
