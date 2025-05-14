@@ -8,3 +8,6 @@ langchain-community
 langchain
 ollama
 python-dotenv
+SpeechRecognition
+PyAudio
+numpy

@@ -1,3 +1,5 @@
+#app.py
+
 import streamlit as st
 import os
 from dotenv import load_dotenv
@@ -39,7 +41,7 @@ def main():
             register_page()
     else:
         # Main application interface for logged-in users
-        st.title('Medical Assistant Chatbot')
+        st.title('Swasthya AI')
 
         # Add sidebar options
         with st.sidebar:

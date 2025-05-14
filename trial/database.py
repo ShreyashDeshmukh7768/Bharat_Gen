@@ -1,5 +1,3 @@
-# database.py
-
 import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
@@ -65,8 +63,39 @@ class SupabaseClient:
             response = self.client.table('users').select('*').eq('email', email).execute()
             return response.data[0] if response.data else None
         except Exception as e:
-            print(f"Error getting user: {e}")
+            print(f"Error getting user by email: {e}")
             return None
+
+    def get_user_by_id(self, user_id):
+        """Retrieve user by ID for profile display/update"""
+        try:
+            response = self.client.table('users').select('*').eq('id', user_id).execute()
+            return response.data[0] if response.data else None
+        except Exception as e:
+            print(f"Error getting user by ID: {e}")
+            return None
+
+    def update_user(self, user_id, update_data):
+        """Update user information"""
+        try:
+            response = self.client.table('users').update(update_data).eq('id', user_id).execute()
+            return True if response.data else False
+        except Exception as e:
+            print(f"Error updating user: {e}")
+            return False
+
+    def update_medical_info(self, user_id, conditions):
+        """Update user medical conditions"""
+        try:
+            # First delete all existing conditions
+            self.client.table('medical_info').delete().eq('user_id', user_id).execute()
+            
+            # Then create new ones
+            self.create_medical_info(user_id, conditions)
+            return True
+        except Exception as e:
+            print(f"Error updating medical info: {e}")
+            return False
 
     def get_user_medical_info(self, user_id):
         """Retrieve user medical conditions"""

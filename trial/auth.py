@@ -1,5 +1,3 @@
-# auth.py
-
 import streamlit as st
 import bcrypt
 from database import SupabaseClient
@@ -27,6 +25,8 @@ def initialize_session_state():
         st.session_state['user_email'] = None
     if 'user_name' not in st.session_state:
         st.session_state['user_name'] = None
+    if 'current_page' not in st.session_state:
+        st.session_state['current_page'] = 'dashboard'
 
 
 def login_page():
@@ -36,7 +36,7 @@ def login_page():
     email = st.text_input("Email", key="login_email")
     password = st.text_input("Password", type="password", key="login_password")
 
-    if st.button("Login"):
+    if st.button("Login", use_container_width=True):
         if not email or not password:
             st.error("Please enter both email and password")
             return
@@ -51,14 +51,12 @@ def login_page():
             st.session_state['user_id'] = user['id']
             st.session_state['user_email'] = user['email']
             st.session_state['user_name'] = user['full_name']
+            st.session_state['current_page'] = 'dashboard'  # Set to dashboard after login
 
             st.success("Login successful!")
-            #st.experimental_user()
+            st.rerun()
         else:
             st.error("Invalid email or password")
-
-    # Link to registration page
-    st.markdown("Don't have an account? [Register here](#register)")
 
 
 def register_page():
@@ -145,9 +143,10 @@ def register_page():
                 db.create_medical_info(user['id'], medical_conditions)
 
                 st.success("Registration successful! You can now log in.")
-                # Set session state to switch to login page
+                
+                # Switch to login tab
                 st.session_state['show_login'] = True
-                #st.experimental_user()
+                st.rerun()
             else:
                 st.error("Registration failed. Please try again.")
 
@@ -158,25 +157,30 @@ def logout():
     st.session_state['user_id'] = None
     st.session_state['user_email'] = None
     st.session_state['user_name'] = None
-    #st.experimental_user()
+    st.session_state['current_page'] = 'login'
+    if 'chat_messages' in st.session_state:
+        del st.session_state['chat_messages']
 
 
 def show_user_info():
     """Display user information in the sidebar"""
     if st.session_state['logged_in']:
-        st.sidebar.markdown(f"*Logged in as:* {st.session_state['user_name']}")
-        st.sidebar.markdown(f"*Email:* {st.session_state['user_email']}")
+        col1, col2 = st.sidebar.columns([1, 3])
+        
+        with col1:
+            st.sidebar.markdown("👤")  # User icon
+        
+        with col2:
+            st.sidebar.markdown(f"**{st.session_state['user_name']}**")
+            st.sidebar.markdown(f"*{st.session_state['user_email']}*")
 
         # Get user medical info
         db = SupabaseClient()
         medical_info = db.get_user_medical_info(st.session_state['user_id'])
 
         if medical_info:
-            st.sidebar.markdown("*Medical Conditions:*")
-            conditions = [info['condition_name'] for info in medical_info]
-            st.sidebar.write(", ".join(conditions))
-
-        if st.sidebar.button("Logout"):
-            logout()
+            with st.sidebar.expander("Medical Conditions"):
+                conditions = [info['condition_name'] for info in medical_info]
+                st.write(", ".join(conditions))
     else:
         st.sidebar.info("Please login to access the application")
