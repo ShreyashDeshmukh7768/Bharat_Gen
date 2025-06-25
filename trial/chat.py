@@ -11,7 +11,7 @@ import time
 
 def initialize_llm():
     """Initialize the language model"""
-    return Ollama(model="tinyllama")
+    return Ollama(model="tinyllama" , temperature=0.5)
 
 
 def get_prompt_template():
