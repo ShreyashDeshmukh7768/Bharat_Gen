@@ -176,18 +176,26 @@ The application will be available at `http://localhost:8501`
 
 ```
 medical-assistant-chatbot/
-├── 📄 app.py                   # Main Streamlit application
-├── 🔐 auth.py                  # User authentication & registration
-├── 💬 chat.py                  # LLM integration & chat logic
-├── 🗄️  database.py             # Supabase database operations
-├── 📷 ocr.py                   # OCR & NER for prescriptions
-├── 📝 diary.py                 # Emotional support diary
-├── 🔧 debug_view_tables.py     # Database debugging utility
-├── 📋 requirements.txt         # Python dependencies
-├── ⚙️  .env                    # Environment variables (create from example)
-├── 📄 .env-example             # Environment template
-└── 📖 README.md                # Project documentation
-```
+├─ app.py                        # Main application entry point
+├─ auth.py                        # Authentication logic
+├─ chat.py                        # Chatbot backend
+├─ dashboard.py                   # Dashboard / UI logic
+├─ database.py                    # Database models & connections
+├─ document_extractor.py          # OCR / document extraction
+├─ document_upload.py             # File upload handling
+├─ emotional_diary_page.py        # Frontend page for diary
+├─ emotional_diary.py             # Backend for diary logic
+├─ mood_visualizations.py         # Charts / graphs for moods
+├─ my_profile.py                  # User profile management
+├─ requirements.txt               # Python dependencies
+├─ .gitignore                     # Ignore env, __pycache__, etc.
+├─ LICENSE                        # MIT / Apache / GPL license
+├─ README.md                      # Project overview, setup instructions
+├─ static/                        # CSS, JS, images for frontend
+│
+├─ env/                            # Python virtual environment (should be in .gitignore)
+└─ venv/                           # Another virtual environment? Only keep one and ignore
+
 
 ## 🎯 Customization
 
